@@ -45,9 +45,7 @@ export default {
   },
   methods: {
     handleLogin() {
-      axios.get("/sanctum/csrf-cookie").then((response) => {
-        //
-      });
+      //
     },
   },
   login() {

@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\User\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -23,7 +23,7 @@ Route::middleware(['guest'])->group(function () {
     Route::get('twitter/callback', [TwitterController::class, "callback"])->name('twitter.callback');
 });
 
-Route::middleware(['auth:sanctum'])->prefix('user')->as('user.')->group(function () {
+Route::middleware(['auth:api'])->prefix('user')->as('user.')->group(function () {
     Route::get('me', [MeController::class, "me"])->name('me');
     Route::post('verify-email', [MeController::class, "verifyEmail"])->name('verify_email');
 });

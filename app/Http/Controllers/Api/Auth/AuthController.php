@@ -27,7 +27,7 @@ class AuthController extends Controller
         $data = $request->only(['name', 'email']);
         $data['password'] =  Hash::make($request->password);
         $user = User::create($data);
-        $token = $user->createToken("website")->plainTextToken;
+        $token = $user->createToken("website")->accessToken;
         return success(['token' => $token]);
     }
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
         $data = ['password' =>  $request->password, $this->findUsername() => $request->login_key];
         if (Auth::attempt($data)) {
             $user = auth()->user();
-            $token = $user->createToken("website")->plainTextToken;
+            $token = $user->createToken("website")->accessToken;
             return success(['token' => $token]);
         }
         return failed("failed to login");

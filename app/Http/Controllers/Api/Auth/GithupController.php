@@ -28,7 +28,7 @@ class GithupController extends Controller
                     'location' => $githupUser->user['location'],
                     'bio' => $githupUser->user['bio']
                 ]);
-                $token = $user->createToken("website")->plainTextToken;
+                $token = $user->createToken("website")->accessToken;
                 return success(['user_recently_created' => false, 'token' => $token]);
             }
 
@@ -47,7 +47,7 @@ class GithupController extends Controller
                 'bio' => $githupUser->user['bio']
             ]);
 
-            $token = $user->createToken("website")->plainTextToken;
+            $token = $user->createToken("website")->accessToken;
             return success(['user_recently_created' => true, 'token' => $token]);
         } catch (\Throwable $th) {
             return failed($th->getMessage());
