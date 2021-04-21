@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\Twitter;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class TwitterController extends Controller
 {
+
     public function login(Request $request)
     {
         $url =  Socialite::driver('twitter')->redirect()->getTargetUrl();
@@ -18,6 +20,8 @@ class TwitterController extends Controller
 
     public function callback(Request $request)
     {
+        $tokens = $this->access_token($request->oauth_token, $request->oauth_verifier);
+        $twitterUser = Socialite::driver('twitter')->userFromTokenAndSecret($tokens->oauth_token, $tokens->oauth_token_secret);
         try {
             $twitterUser = Socialite::driver('twitter')->user();
             return success(['twitter' => [
@@ -34,5 +38,21 @@ class TwitterController extends Controller
         } catch (\Throwable $th) {
             return failed($th->getMessage());
         }
+    }
+
+    public function twitter_redirect(Request $request)
+    {
+        $tokens = $this->access_token($request->oauth_token, $request->oauth_verifier);
+        $user = Socialite::driver('twitter')->userFromTokenAndSecret($tokens->oauth_token, $tokens->oauth_token_secret);
+        return response()->json($user, 201);
+    }
+
+
+    private function access_token($oauth_token, $oauth_verifier)
+    {
+        $config = config('services')['twitter'];
+        $connection = new TwitterOAuth($config['client_id'], $config['client_secret']);
+        $tokens = $connection->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier, "oauth_token" => $oauth_token]);
+        return (object) $tokens;
     }
 }
