@@ -64,7 +64,11 @@ class AuthController extends Controller
 
     public function refreshToken()
     {
-        $resp = $this->proxy->refreshAccessToken();
+        try {
+            $resp = $this->proxy->refreshAccessToken();
+        } catch (\Throwable $th) {
+            return failed($th->getMessage(), ['expired' => true]);
+        }
 
         return success([
             'token' => $resp->access_token,
