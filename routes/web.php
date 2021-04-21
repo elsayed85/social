@@ -85,3 +85,6 @@ Route::get('block', function () {
 
 Route::get('twitter/login', [TwitterController::class, "login"])->name('twitter.login');
 Route::get('twitter/callback', [TwitterController::class, "callback"])->name('twitter.callback');
+
+
+Route::view('test' , 'test');
