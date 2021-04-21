@@ -18,19 +18,19 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'user 1',
             'email' => "user1@gmail.com",
-            'password' => Hash::make('password')
+            'password' => Hash::make('user1@gmail.com')
         ]);
 
         User::create([
             'name' => 'user 2',
             'email' => "user2@gmail.com",
-            'password' => Hash::make('password')
+            'password' => Hash::make('user1@gmail.com')
         ]);
 
         User::create([
             'name' => 'user 3',
             'email' => "user3@gmail.com",
-            'password' => Hash::make('password')
+            'password' => Hash::make('user1@gmail.com')
         ]);
     }
 }
