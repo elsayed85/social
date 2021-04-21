@@ -41,5 +41,8 @@ return [
         'client_secret' => env('TWITTER_API_SECRET_KEY'),
         'redirect' => env('TWITTER_CALLBACK_URL'),
     ],
-
+    'passport' => [
+        'password_client_id' => env('PASSWORD_CLIENT_ID'),
+        'password_client_secret' => env('PASSWORD_CLIENT_SECRET'),
+    ],
 ];
