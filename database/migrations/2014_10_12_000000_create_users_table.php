@@ -18,11 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('username')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
+            $table->string('timezone')->nullable();
             $table->text('profile_photo_path')->nullable();
+            $table->timestamp('banned_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('needs_to_approve_follow_requests')->default(false);
             $table->timestamps();
         });
     }

@@ -2,6 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Auth\Githup;
+use App\Models\Auth\Twitter;
+use App\Services\Timezone;
+use App\Traits\Blockable;
+use App\Traits\LocalTimestamps;
+use Cog\Contracts\Ban\Bannable as BannableContract;
+use Cog\Laravel\Ban\Traits\Bannable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,8 +17,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelFollow\Followable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, BannableContract
 {
     use HasApiTokens;
     use HasFactory;
@@ -19,6 +27,10 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use TwoFactorAuthenticatable;
     use Sluggable;
+    use Followable;
+    use Bannable;
+    use Blockable;
+    use LocalTimestamps;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +41,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'timezone',
+        'banned_at',
+        'needs_to_approve_follow_requests'
     ];
 
     /**
@@ -50,6 +65,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'banned_at' => 'datetime',
+        'needs_to_approve_follow_requests' => 'boolean'
     ];
 
     /**
@@ -73,5 +90,25 @@ class User extends Authenticatable implements MustVerifyEmail
                 'source' => 'name'
             ]
         ];
+    }
+
+    public function getEmailVerifiedAtAttribute($value)
+    {
+        return Timezone::convertToLocal($value);
+    }
+
+    public function githup()
+    {
+        return $this->hasOne(Githup::class);
+    }
+
+    public function twitter()
+    {
+        return $this->hasOne(Twitter::class);
+    }
+
+    public function needsToApproveFollowRequests()
+    {
+        return (bool) $this->needs_to_approve_follow_requests;
     }
 }
