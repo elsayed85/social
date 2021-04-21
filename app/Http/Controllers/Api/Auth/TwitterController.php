@@ -20,20 +20,16 @@ class TwitterController extends Controller
 
     public function callback(Request $request)
     {
-        $tokens = $this->access_token($request->oauth_token, $request->oauth_verifier);
-        $twitterUser = Socialite::driver('twitter')->userFromTokenAndSecret($tokens->oauth_token, $tokens->oauth_token_secret);
         try {
-            $twitterUser = Socialite::driver('twitter')->user();
+            $tokens = $this->access_token($request->oauth_token, $request->oauth_verifier);
+            $twitterUser = Socialite::driver('twitter')->userFromTokenAndSecret($tokens->oauth_token, $tokens->oauth_token_secret);
             return success(['twitter' => [
                 'twitter_id' => $twitterUser->id,
                 'username' => $twitterUser->nickname,
                 'name' => $twitterUser->name,
                 'email' => $twitterUser->email,
-                'location' => $twitterUser->user['location'],
-                'bio' => $twitterUser->user['description'],
-                'avatar_original' => $twitterUser->avatar_original,
+                'avatar_original' => str_replace('_normal', '', $twitterUser->avatar),
                 'avatar' => $twitterUser->avatar,
-                'banner_url' => $twitterUser->user['profile_banner_url']
             ]]);
         } catch (\Throwable $th) {
             return failed($th->getMessage());

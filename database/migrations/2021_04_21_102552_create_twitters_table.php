@@ -17,8 +17,6 @@ class CreateTwittersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('twitter_id')->unique();
             $table->string('username')->unique();
-            $table->mediumText('bio')->nullable();
-            $table->string('location')->nullable();
             $table->string('avatar');
             $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete()->cascadeOnUpdate();

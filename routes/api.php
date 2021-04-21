@@ -7,16 +7,16 @@ use App\Http\Controllers\Api\User\MeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['guest'])->prefix('auth')->as('auth.')->group(function () {
+Route::middleware(['guest'])->group(function () {
     Route::post('register', [AuthController::class, "register"])->name('register');
     Route::post('login', [AuthController::class, "login"])->name('login');
     Route::post('forget-password', [AuthController::class, "forgetPassword"])->name('forget_password');
 
-    Route::get('github/login', [GithupController::class, "login"])->name('login');
-    Route::get('github/callback', [GithupController::class, "callback"])->name('callback');
-    
-    Route::get('twitter/login', [TwitterController::class, "login"])->name('login');
-    Route::get('twitter/callback', [TwitterController::class, "callback"])->name('callback');
+    Route::get('github/login', [GithupController::class, "login"])->name('githup.login');
+    Route::get('github/callback', [GithupController::class, "callback"])->name('githup.callback');
+
+    Route::get('twitter/login', [TwitterController::class, "login"])->name('twitter.login');
+    Route::get('twitter/callback', [TwitterController::class, "callback"])->name('twitter.callback');
 });
 
 Route::middleware(['auth:sanctum'])->prefix('user')->as('user.')->group(function () {

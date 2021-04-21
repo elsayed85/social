@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\TwitterController;
 use App\Models\User;
 use App\Services\Timezone;
 use Illuminate\Foundation\Application;
@@ -80,3 +81,7 @@ Route::get('block', function () {
         ]
     ]);
 });
+
+
+Route::get('twitter/login', [TwitterController::class, "login"])->name('twitter.login');
+Route::get('twitter/callback', [TwitterController::class, "callback"])->name('twitter.callback');
