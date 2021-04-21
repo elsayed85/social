@@ -42,7 +42,7 @@ class ProxyRequest
 
         $this->setHttpOnlyCookie($resp->refresh_token);
 
-        return $resp;
+        return $resp;  
     }
 
     protected function setHttpOnlyCookie(string $refreshToken)
