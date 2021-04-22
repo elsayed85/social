@@ -1,7 +1,7 @@
     
     composer update (required)
     pamf --seed (required)
-    
+
 --
 
     npm install
@@ -20,3 +20,4 @@
 in future :
 
     pa queue:work
+    pa websockets:serve
