@@ -12,6 +12,16 @@ class MeController extends Controller
         return success(auth()->user());
     }
 
+    public function statuses()
+    {
+        $user = auth()->user();
+        return success([
+            'verified_email' => $user->hasVerifiedEmail(),
+            'verified_account' => $user->isVerified(),
+            'baned' => $user->isBanned(),
+        ]);
+    }
+
     public function verifyEmail()
     {
         $user = auth()->user();

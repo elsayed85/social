@@ -19,12 +19,13 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('password')->nullable();
-            $table->rememberToken();
             $table->string('timezone')->nullable();
             $table->text('profile_photo_path')->nullable();
             $table->timestamp('banned_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->boolean('private')->default(false);
+            $table->rememberToken();
             $table->timestamps();
         });
     }

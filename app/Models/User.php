@@ -7,6 +7,7 @@ use App\Models\Auth\Twitter;
 use App\Services\Timezone;
 use App\Traits\Blockable;
 use App\Traits\LocalTimestamps;
+use App\Traits\Verifiable;
 use Cog\Contracts\Ban\Bannable as BannableContract;
 use Cog\Laravel\Ban\Traits\Bannable;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -31,6 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     use Bannable;
     use Blockable;
     use LocalTimestamps;
+    use Verifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +45,8 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
         'password',
         'timezone',
         'banned_at',
-        'private'
+        'private',
+        'verified_at'
     ];
 
     /**
@@ -66,7 +69,8 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     protected $casts = [
         'email_verified_at' => 'datetime',
         'banned_at' => 'datetime',
-        'private' => 'boolean'
+        'private' => 'boolean',
+        'verified_at' => 'datetime'
     ];
 
     /**
@@ -99,9 +103,8 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
 
     public function needsToApproveFollowRequests()
     {
-        return (bool) $this->private;
+        return $this->private;
     }
-
 
     public function isFollowingAndAccepted($user)
     {

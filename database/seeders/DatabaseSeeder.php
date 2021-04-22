@@ -33,6 +33,22 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('user1@gmail.com')
         ]);
 
+        User::create([
+            'name' => 'Mohamed Higgy',
+            'email' => "mohamed.higgy31@gmail.com",
+            'password' => Hash::make('mohamed.higgy31@gmail.com'),
+            'email_verified_at' => now(),
+            'verified_at' => now()
+        ]);
+
+        User::create([
+            'name' => 'Elsayed Kamal',
+            'email' => "elsayedkamal581999@gmail.com",
+            'password' => Hash::make('elsayedkamal581999@gmail.com'),
+            'email_verified_at' => now(),
+            'verified_at' => now()
+        ]);
+
         //User::factory()->count(100)->create();
     }
 }

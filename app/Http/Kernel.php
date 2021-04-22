@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Api\User\BannedUserMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Session\Middleware\StartSession;
 
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'banned-user-api' => BannedUserMiddleware::class,
     ];
 }

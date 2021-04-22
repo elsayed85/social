@@ -19,5 +19,6 @@
 
 in future :
 
-    pa queue:work
+    pa queue:work (required)
+    pa schedule:run (required) [run queue , delete expired bans]
     pa websockets:serve
