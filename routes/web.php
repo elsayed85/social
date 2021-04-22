@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\TwitterController;
+use App\Models\Posts\Post;
 use App\Models\User;
 use App\Services\Timezone;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -73,7 +75,21 @@ Route::get('follow', function () {
 });
 
 Route::get('test2', function () {
+    auth()->loginUsingId(1);
+
     $user1 = User::find(1);
-    $user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => now()->addMinutes(rand(1, 5))]);
-    //$user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => null()]);
+    $posts = Post::take(10)->Trashed()->with(['LoveReactions'])->get();
+    // $user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => now()->addMinutes(rand(1, 5))]);
+    // //$user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => null()]);
+
+    $post = $posts->where("id", 1)->first();
+    // $post->restore();
+    // $post->publishNow()
+    //$post->toggleLove();
+    //dd(Post::OrderByLikesCount()->get()->random(10));
+
+    //$post->love();
+    dd($post->collectLovers());
+
+    dd($post->isDraft(), $post->isTrashed(), $post->isPublished());
 });

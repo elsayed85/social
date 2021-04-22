@@ -38,6 +38,7 @@ class GithupController extends Controller
                 'email' => $githupUser->email,
                 'email_verified_at' => now(),
             ]);
+
             $user->githup()->create([
                 'token' => $githupUser->token,
                 'username' => $githupUser->nickname,

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Posts\Post;
 use App\Models\User;
 use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -48,10 +49,15 @@ class UserFactory extends Factory
 
     public function configure()
     {
-        return $this->afterMaking(function (User $user) {
-            //
-        })->afterCreating(function (User $user) {
-            $user->follow(User::all()->random());
+        return $this->afterCreating(function (User $user) {
+            $user->follow(User::where("id", "!=", $user->id)->get()->random());
+            $user->posts()->saveMany(Post::factory()->count(rand(1, 10))->make());
+            $randomUsers = User::all()->random(rand(2, 20));
+            $user->posts()->Published()->get()->each(function (Post $post) use ($randomUsers) {
+                $randomUsers->each(function (User $user) use ($post) {
+                    $post->love($user);
+                });
+            });
         });
     }
 }

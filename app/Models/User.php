@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Auth\Githup;
 use App\Models\Auth\Twitter;
+use App\Models\Posts\Post;
 use App\Services\Timezone;
 use App\Traits\Blockable;
 use App\Traits\LocalTimestamps;
@@ -159,5 +160,10 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     public function twitter()
     {
         return $this->hasOne(Twitter::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

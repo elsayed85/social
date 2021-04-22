@@ -49,6 +49,6 @@ class DatabaseSeeder extends Seeder
             'verified_at' => now()
         ]);
 
-        //User::factory()->count(100)->create();
+        User::factory()->count(100)->create();
     }
 }
