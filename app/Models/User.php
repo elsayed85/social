@@ -19,6 +19,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Passport\HasApiTokens;
+use Nicolaslopezj\Searchable\SearchableTrait;
 use Overtrue\LaravelFollow\Followable;
 
 class User extends Authenticatable implements MustVerifyEmail, BannableContract
@@ -34,6 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     use Blockable;
     use LocalTimestamps;
     use Verifiable;
+    use SearchableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -82,6 +84,31 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        /**
+         * Columns and their priority in search results.
+         * Columns with higher values are more important.
+         * Columns with equal values have equal importance.
+         *
+         * @var array
+         */
+        'columns' => [
+            'users.name' => 10,
+            'users.username' => 2,
+            'users.email' => 5,
+            'posts.content' => 12,
+        ],
+        'joins' => [
+            'posts' => ['users.id', 'posts.user_id'],
+        ],
+    ];
+
 
     /**
      * Return the sluggable configuration array for this model.

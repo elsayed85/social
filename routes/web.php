@@ -93,3 +93,10 @@ Route::get('test2', function () {
 
     dd($post->isDraft(), $post->isTrashed(), $post->isPublished());
 });
+
+
+Route::get('test3', function () {
+    $posts = Post::search(request('query'))
+        ->get();
+    dd($posts);
+});

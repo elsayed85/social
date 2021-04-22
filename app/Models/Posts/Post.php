@@ -8,13 +8,19 @@ use App\Traits\Publishable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
     use HasFactory;
     use SoftDeletes;
     use Publishable;
     use Loveable;
+    use SearchableTrait;
+    use InteractsWithMedia;
+
 
     /**
      * The attributes that aren't mass assignable.
@@ -33,6 +39,30 @@ class Post extends Model
         'updated_at',
         'deleted_at',
         'published_at'
+    ];
+
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        /**
+         * Columns and their priority in search results.
+         * Columns with higher values are more important.
+         * Columns with equal values have equal importance.
+         *
+         * @var array
+         */
+        'columns' => [
+            'users.name' => 2,
+            'users.username' => 2,
+            'users.email' => 1,
+            'posts.content' => 3,
+        ],
+        'joins' => [
+            'users' => ['users.id', 'posts.user_id'],
+        ],
     ];
 
     public function user()
