@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -37,5 +38,24 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (Exception $e, $request) {
+            return $this->handleException($request, $e);
+        });
+    }
+
+    public function handleException($request, Exception $e)
+    {
+        $code = 500;
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+            $code = $e->getStatusCode();
+            return failed($e->getMessage(), [
+                'error_code' => $e->getCode(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'trace' => $e->getTrace(),
+            ],  $code);
+        }
+
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\GithupController;
 use App\Http\Controllers\Api\Auth\TwitterController;
+use App\Http\Controllers\Api\User\BlockController;
 use App\Http\Controllers\Api\User\FollowController;
 use App\Http\Controllers\Api\User\MeController;
 use Illuminate\Http\Request;
@@ -36,9 +37,23 @@ Route::middleware(['auth:api'])->prefix('user')->as('user.')->group(function () 
     Route::prefix('follow-sys')->group(function () {
         Route::post('follow', [FollowController::class, "follow"])->name('follow');
         Route::post('unfollow', [FollowController::class, "unfollow"])->name('unfollow');
-        Route::get('followings', [FollowController::class, "followingsList"])->name('followings_list');
-        Route::get('followers', [FollowController::class, "followersList"])->name('followers_list');
+        Route::post('toggle-follow', [FollowController::class, "toggleFollow"])->name('toggle_follow');
+        Route::post('has-requested-to-follow', [FollowController::class, "hasRequestedToFollow"])->name('has_requested_to_follow');
+        Route::post('accept-follow-request-from', [FollowController::class, "acceptFollowRequestFrom"])->name('accept_follow_request_from');
+        Route::post('reject-follow-request-from', [FollowController::class, "rejectFollowRequestFrom"])->name('reject_follow_request_from');
+        Route::post('are-following-each-other', [FollowController::class, "areFollowingEachOther"])->name('are_following_each_other');
         Route::post('is-followed-by-user', [FollowController::class, "isFollowedByUser"])->name('is_followed_by_user');
         Route::post('is-follow-user', [FollowController::class, "isFollowUser"])->name('is_follow_user');
+        Route::get('followings', [FollowController::class, "followingsList"])->name('followings_list');
+        Route::get('followers', [FollowController::class, "followersList"])->name('followers_list');
+    });
+
+    Route::prefix('block-sys')->group(function () {
+        Route::post('block', [BlockController::class, "block"])->name('block');
+        Route::post('unblock', [BlockController::class, "unblock"])->name('unblock');
+        Route::post('is-blocked-by-user', [BlockController::class, "isBlockedByUser"])->name('is_blocked_by_user');
+        Route::post('is-blocking-user', [BlockController::class, "isBlockingUser"])->name('is_blocking_user');
+        Route::post('is-mutual-block', [BlockController::class, "isMutualBlock"])->name('is_mutual_block');
+        Route::get('blocked-users', [BlockController::class, "blockedUsersList"])->name('blocked_users');
     });
 });

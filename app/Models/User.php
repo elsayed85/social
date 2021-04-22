@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
         'password',
         'timezone',
         'banned_at',
-        'needs_to_approve_follow_requests'
+        'private'
     ];
 
     /**
@@ -66,7 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     protected $casts = [
         'email_verified_at' => 'datetime',
         'banned_at' => 'datetime',
-        'needs_to_approve_follow_requests' => 'boolean'
+        'private' => 'boolean'
     ];
 
     /**
@@ -99,11 +99,11 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
 
     public function needsToApproveFollowRequests()
     {
-        return true;
-        return (bool) $this->needs_to_approve_follow_requests;
+        return (bool) $this->private;
     }
 
-    public function followIsAccepted($user)
+
+    public function isFollowingAndAccepted($user)
     {
         if ($user instanceof Model) {
             $user = $user->getKey();
@@ -126,7 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
         return !is_null($requestIsAccepted);
     }
 
-    public function userFollowIsAccepted($user)
+    public function isFollowerAndAccepted($user)
     {
         if ($user instanceof Model) {
             $user = $user->getKey();

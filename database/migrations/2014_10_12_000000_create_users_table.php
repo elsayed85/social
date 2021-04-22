@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->text('profile_photo_path')->nullable();
             $table->timestamp('banned_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->boolean('needs_to_approve_follow_requests')->default(false);
+            $table->boolean('private')->default(false);
             $table->timestamps();
         });
     }
