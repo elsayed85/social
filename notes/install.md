@@ -1,8 +1,9 @@
-composer update (required)
-pamf --seed (required)
+    
+    composer update (required)
+    pamf --seed (required)
 
-npm install
-npm run dev
+    npm install
+    npm run dev
 
 php artisan passport:install => and copy the two keys => put in .env (very required)
 
