@@ -15,27 +15,29 @@ Route::middleware(['verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::get('folow', function () {
+Route::get('follow', function () {
     $user1 = User::find(1);
-    $user2 = User::find(2);
+    // $user2 = User::find(2);
 
-    $user1->follow($user2);
+    User::all()->random(10)->each(function($user2) use($user1){
+        $user1->follow($user2);
+    });
 
 
-    dd([
-        'user1' => [
-            'followings' => $user1->followings,
-            'followers' => $user1->followers,
-            'is_followed_by_user2' => $user1->isFollowedBy(2),
-            'is_follow_user2' => $user1->isFollowing(2),
-        ],
-        'user2' => [
-            'followings' => $user2->followings,
-            'followers' => $user2->followers,
-            'is_followed_by_user1' => $user2->isFollowedBy(1),
-            'is_follow_user1' => $user2->isFollowing(1),
-        ]
-    ]);
+    // dd([
+    //     'user1' => [
+    //         'followings' => $user1->followings,
+    //         'followers' => $user1->followers,
+    //         'is_followed_by_user2' => $user1->isFollowedBy(2),
+    //         'is_follow_user2' => $user1->isFollowing(2),
+    //     ],
+    //     'user2' => [
+    //         'followings' => $user2->followings,
+    //         'followers' => $user2->followers,
+    //         'is_followed_by_user1' => $user2->isFollowedBy(1),
+    //         'is_follow_user1' => $user2->isFollowing(1),
+    //     ]
+    // ]);
 });
 
 Route::get('block', function () {

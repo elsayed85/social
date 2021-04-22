@@ -97,6 +97,57 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
         return Timezone::convertToLocal($value);
     }
 
+    public function needsToApproveFollowRequests()
+    {
+        return true;
+        return (bool) $this->needs_to_approve_follow_requests;
+    }
+
+    public function followIsAccepted($user)
+    {
+        if ($user instanceof Model) {
+            $user = $user->getKey();
+        }
+
+        /* @var \Illuminate\Database\Eloquent\Model $this */
+        if ($this->relationLoaded('followings')) {
+            $requestIsAccepted = optional(optional(
+                $this->followings
+                    ->where($this->getKeyName(), $user->id)
+                    ->first()
+            )->pivot)->accepted_at;
+            return !is_null($requestIsAccepted);
+        }
+
+        $requestIsAccepted = optional(optional($this->followings()
+            ->where("following_id", $user->id)
+            ->first())
+            ->pivot)->accepted_at;
+        return !is_null($requestIsAccepted);
+    }
+
+    public function userFollowIsAccepted($user)
+    {
+        if ($user instanceof Model) {
+            $user = $user->getKey();
+        }
+
+        if ($this->relationLoaded('followers')) {
+            $requestIsAccepted = optional(optional(
+                $this->followers
+                    ->where($this->getKeyName(), $user->id)
+                    ->first()
+            )->pivot)->accepted_at;
+            return !is_null($requestIsAccepted);
+        }
+
+        $requestIsAccepted = optional(optional($this->followers()
+            ->where("following_id", $user->id)
+            ->first())
+            ->pivot)->accepted_at;
+        return !is_null($requestIsAccepted);
+    }
+
     public function githup()
     {
         return $this->hasOne(Githup::class);
@@ -105,10 +156,5 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     public function twitter()
     {
         return $this->hasOne(Twitter::class);
-    }
-
-    public function needsToApproveFollowRequests()
-    {
-        return (bool) $this->needs_to_approve_follow_requests;
     }
 }

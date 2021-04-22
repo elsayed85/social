@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utilities;
+namespace App\Services;
 
 class ProxyRequest
 {
@@ -42,7 +42,7 @@ class ProxyRequest
 
         $this->setHttpOnlyCookie($resp->refresh_token);
 
-        return $resp;  
+        return $resp;
     }
 
     protected function setHttpOnlyCookie(string $refreshToken)

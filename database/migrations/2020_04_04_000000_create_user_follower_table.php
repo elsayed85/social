@@ -25,6 +25,9 @@ class CreateUserFollowerTable extends Migration
             $table->unsignedBigInteger('following_id')->index();
             $table->unsignedBigInteger('follower_id')->index();
             $table->timestamp('accepted_at')->nullable()->index();
+            $table->unique(['following_id' , 'follower_id']);
+            $table->foreign('following_id')->on('users')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign('follower_id')->on('users')->references('id')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
