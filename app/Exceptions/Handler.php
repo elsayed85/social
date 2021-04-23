@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -39,8 +40,10 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function (Exception $e, $request) {
-            return $this->handleException($request, $e);
+        $this->renderable(function (Exception $e, Request $request) {
+            if ($request->wantsJson()) {
+                return $this->handleException($request, $e);
+            }
         });
     }
 
@@ -56,6 +59,5 @@ class Handler extends ExceptionHandler
                 'trace' => $e->getTrace(),
             ],  $code);
         }
-
     }
 }

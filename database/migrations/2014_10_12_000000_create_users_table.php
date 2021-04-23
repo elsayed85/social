@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password')->nullable();
             $table->string('timezone')->nullable();
-            $table->text('profile_photo_path')->nullable();
             $table->timestamp('banned_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('verified_at')->nullable();

@@ -30,8 +30,9 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth:api', 'banned-user-api'])->prefix('user')->as('user.')->group(function () {
-    
+
     Route::get('me', [MeController::class, "me"])->name('me')->withoutMiddleware(['banned-user-api']);
+    Route::post('update-avatar', [MeController::class, "updataAvatar"])->name('updata_avatar');
     Route::get('statuses', [MeController::class, "statuses"])->name('statuses')->withoutMiddleware(['banned-user-api']);
     Route::post('logout', [AuthController::class, "logout"])->name('logout')->withoutMiddleware(['banned-user-api']);
 

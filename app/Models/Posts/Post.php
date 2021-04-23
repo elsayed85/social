@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Post extends Model implements HasMedia
 {
@@ -64,6 +65,35 @@ class Post extends Model implements HasMedia
             'users' => ['users.id', 'posts.user_id'],
         ],
     ];
+
+    public static function getVideoValidationRules()
+    {
+        return ['video/mp4', 'video/avi'];
+    }
+
+    public static function getImageValidationRules()
+    {
+        return ['image/jpeg', 'image/png', 'image/jpg'];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('pimg')
+            ->acceptsMimeTypes(static::getImageValidationRules())
+            ->onlyKeepLatest(4)
+            ->registerMediaConversions(function (Media $media) {
+                $this
+                    ->addMediaConversion('pimg-thump')
+                    ->width(100)
+                    ->height(100);
+            });
+
+        $this
+            ->addMediaCollection('pvid')
+            ->acceptsMimeTypes(static::getVideoValidationRules())
+            ->onlyKeepLatest(2);
+    }
 
     public function user()
     {

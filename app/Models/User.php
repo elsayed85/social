@@ -21,8 +21,11 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Passport\HasApiTokens;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Overtrue\LaravelFollow\Followable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements MustVerifyEmail, BannableContract
+class User extends Authenticatable implements MustVerifyEmail, BannableContract, HasMedia
 {
     use HasApiTokens;
     use HasFactory;
@@ -36,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
     use LocalTimestamps;
     use Verifiable;
     use SearchableTrait;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -82,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
      * @var array
      */
     protected $appends = [
-        'profile_photo_url',
+        'avatar'
     ];
 
     /**
@@ -109,6 +113,8 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
         ],
     ];
 
+    public const AVATAR_SIZE = 3072; // 3MB
+
 
     /**
      * Return the sluggable configuration array for this model.
@@ -122,6 +128,47 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract
                 'source' => 'name'
             ]
         ];
+    }
+
+    public static function getImageValidationRules()
+    {
+        return ['image/jpeg', 'image/png', 'image/jpg'];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('avatar')
+            ->acceptsMimeTypes(static::getImageValidationRules())
+            ->singleFile()
+            ->registerMediaConversions(function (Media $media) {
+                $this
+                    ->addMediaConversion('avatar-thumb-x1')
+                    ->width(100)
+                    ->height(100)
+                    ->nonQueued();
+                $this
+                    ->addMediaConversion('avatar-thumb-x2')
+                    ->width(200)
+                    ->height(200)
+                    ->nonQueued();
+            });
+    }
+
+    public function getAvatarAttribute()
+    {
+        $avatar = $this->getFirstMedia('avatar');
+        if (!is_null($avatar)) {
+            return collect([
+                'original' => $avatar->getFullUrl(),
+                'thumps' => [
+                    'x1' => $avatar->getUrl('avatar-thumb-x1'),
+                    'x2' => $avatar->getUrl('avatar-thumb-x2')
+                ]
+            ]);
+        }
+        $name = str_replace(' ', '+', $this->name);
+        return collect(['original' => "https://ui-avatars.com/api/?name={$name}&color=7F9CF5&background=EBF4FF"]);
     }
 
     public function getEmailVerifiedAtAttribute($value)

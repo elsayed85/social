@@ -34,7 +34,7 @@
                     Select A New Photo
                 </jet-secondary-button>
 
-                <jet-secondary-button type="button" class="mt-2" @click.prevent="deletePhoto" v-if="user.profile_photo_path">
+                <jet-secondary-button type="button" class="mt-2" @click.prevent="deletePhoto" v-if="user.avatar">
                     Remove Photo
                 </jet-secondary-button>
 

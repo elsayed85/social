@@ -21,6 +21,7 @@
         "livewire/livewire": "^2.0",
         "nicolaslopezj/searchable": "^1.13",
         "overtrue/laravel-follow": "^2.3",
+        "php-ffmpeg/php-ffmpeg": "^0.18.0",
         "spatie/laravel-medialibrary": "^9.0.0",
         "tightenco/ziggy": "^1.0"
     },
