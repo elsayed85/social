@@ -21,6 +21,7 @@ class MeController extends Controller
             'verified_email' => $user->hasVerifiedEmail(),
             'verified_account' => $user->isVerified(),
             'baned' => $user->isBanned(),
+            '2fa_enabled' => $user->two_factor_auth_enabled
         ]);
     }
 

@@ -28,6 +28,11 @@ class AuthServiceProvider extends ServiceProvider
 
         if (!$this->app->routesAreCached()) {
             Passport::routes();
+
+            Passport::tokensCan([
+                '2fa-pass' => '2FA Pass',
+                '2fa-not-pass' => '2FA Pass',
+            ]);
         }
     }
 }

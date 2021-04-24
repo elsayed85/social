@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Api\PasswordConfirmationApiMiddleware;
+use App\Http\Middleware\Api\Two_FA_CheckForAnyScope;
 use App\Http\Middleware\Api\User\BannedUserMiddleware;
 use App\Http\Middleware\Api\WantsJsonMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -46,6 +48,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Session\Middleware\StartSession::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -70,5 +74,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'banned-user-api' => BannedUserMiddleware::class,
         'wants-json' => WantsJsonMiddleware::class,
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
+        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+        '2fa_scope' => Two_FA_CheckForAnyScope::class,
+        'password_api.confirm' => PasswordConfirmationApiMiddleware::class,
     ];
 }

@@ -86,7 +86,8 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
      * @var array
      */
     protected $appends = [
-        'avatar'
+        'avatar',
+        'two_factor_auth_enabled'
     ];
 
     /**
@@ -169,6 +170,11 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
         }
         $name = str_replace(' ', '+', $this->name);
         return collect(['original' => "https://ui-avatars.com/api/?name={$name}&color=7F9CF5&background=EBF4FF"]);
+    }
+
+    public function getTwoFactorAuthEnabledAttribute()
+    {
+        return !is_null($this->two_factor_secret);
     }
 
     public function getEmailVerifiedAtAttribute($value)

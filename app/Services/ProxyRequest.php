@@ -4,7 +4,7 @@ namespace App\Services;
 
 class ProxyRequest
 {
-    public function grantPasswordToken(string $email, string $password)
+    public function grantPasswordToken(string $email, string $password, $scope = '')
     {
         $params = [
             'grant_type' => 'password',
@@ -12,10 +12,10 @@ class ProxyRequest
             'password' => $password,
         ];
 
-        return $this->makePostRequest($params);
+        return $this->makePostRequest($params, $scope);
     }
 
-    public function refreshAccessToken()
+    public function refreshAccessToken($scope = '')
     {
         $refreshToken = request()->cookie('refresh_token');
 
@@ -26,15 +26,15 @@ class ProxyRequest
             'refresh_token' => $refreshToken,
         ];
 
-        return $this->makePostRequest($params);
+        return $this->makePostRequest($params, $scope);
     }
 
-    protected function makePostRequest(array $params)
+    protected function makePostRequest(array $params, $scope = '')
     {
         $params = array_merge([
             'client_id' => config('services.passport.password_client_id'),
             'client_secret' => config('services.passport.password_client_secret'),
-            'scope' => '*',
+            'scope' => $scope,
         ], $params);
 
         $proxy = \Request::create('oauth/token', 'post', $params);

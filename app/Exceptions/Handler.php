@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Laravel\Passport\Exceptions\MissingScopeException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,7 +52,14 @@ class Handler extends ExceptionHandler
     public function handleException($request, Exception $e)
     {
         $code = 500;
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+        if ($e instanceof AccessDeniedHttpException) {
+            return failed($e->getMessage(), [
+                'error_code' => $e->getCode(),
+                'scope_missing' => true,
+                '2fa_enabled' => !is_null(auth()->user()->two_factor_secret),
+                'message' => $e->getMessage()
+            ],  $code);
+        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
             $code = $e->getStatusCode();
             return failed($e->getMessage(), [
                 'error_code' => $e->getCode(),

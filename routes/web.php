@@ -75,23 +75,36 @@ Route::get('follow', function () {
 });
 
 Route::get('test2', function () {
-    auth()->loginUsingId(1);
+    auth()->loginUsingId(5);
 
-    $user1 = User::find(1);
-    $posts = Post::take(10)->Trashed()->with(['LoveReactions'])->get();
-    // $user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => now()->addMinutes(rand(1, 5))]);
-    // //$user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => null()]);
+    $user = auth()->user();
 
-    $post = $posts->where("id", 1)->first();
-    // $post->restore();
-    // $post->publishNow()
-    //$post->toggleLove();
-    //dd(Post::OrderByLikesCount()->get()->random(10));
+    $recoveryCodes = $user->recoveryCodes();
 
-    //$post->love();
-    dd($post->collectLovers());
+    $twoFactorQrCodeSvg = $user->twoFactorQrCodeSvg();
 
-    dd($post->isDraft(), $post->isTrashed(), $post->isPublished());
+    $twoFactorQrCodeUrl = $user->twoFactorQrCodeUrl();
+
+
+    dd($recoveryCodes , $twoFactorQrCodeSvg , $twoFactorQrCodeUrl);
+
+
+
+    // $user1 = User::find(1);
+    // $posts = Post::take(10)->Trashed()->with(['LoveReactions'])->get();
+    // // $user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => now()->addMinutes(rand(1, 5))]);
+    // // //$user1->ban(['comment' => "randome comment " . rand(1, 300), 'expired_at' => null()]);
+
+    // $post = $posts->where("id", 1)->first();
+    // // $post->restore();
+    // // $post->publishNow()
+    // //$post->toggleLove();
+    // //dd(Post::OrderByLikesCount()->get()->random(10));
+
+    // //$post->love();
+    // dd($post->collectLovers());
+
+    // dd($post->isDraft(), $post->isTrashed(), $post->isPublished());
 });
 
 
