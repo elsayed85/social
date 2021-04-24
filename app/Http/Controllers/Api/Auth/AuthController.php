@@ -49,7 +49,8 @@ class AuthController extends Controller
                 'token_type' => $resp->token_type,
                 'access_token' => $resp->access_token,
                 'refresh_token' => $resp->refresh_token,
-                'expires_in' => $resp->expires_in
+                'expires_in' => $resp->expires_in,
+                'user_id' => auth()->id()
             ]);
         }
         return failed("failed to login");

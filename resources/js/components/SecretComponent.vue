@@ -67,7 +67,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .form-row {
   margin-bottom: 8px;

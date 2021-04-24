@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -12,10 +11,10 @@
 </head>
 
 <body>
-    <div id="app" class="flex-center position-ref full-height" id="app">
-        <secret-component></secret-component>
+    <div id="app" class="flex-center position-ref full-height">
+        <events-component></events-component>
     </div>
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

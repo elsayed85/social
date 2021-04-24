@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\TestEvents;
 use App\Http\Controllers\Api\Auth\TwitterController;
 use App\Models\Posts\Post;
 use App\Models\User;
@@ -75,18 +76,20 @@ Route::get('follow', function () {
 });
 
 Route::get('test2', function () {
-    auth()->loginUsingId(5);
+    auth()->loginUsingId(1);
 
-    $user = auth()->user();
+    event(new TestEvents(auth()->id(), ['new_post' => ['content' => "joithjreu9iothurewhytu9hrtu9yhrt9uh"]]));
 
-    $recoveryCodes = $user->recoveryCodes();
+    // $user = auth()->user();
 
-    $twoFactorQrCodeSvg = $user->twoFactorQrCodeSvg();
+    // $recoveryCodes = $user->recoveryCodes();
 
-    $twoFactorQrCodeUrl = $user->twoFactorQrCodeUrl();
+    // $twoFactorQrCodeSvg = $user->twoFactorQrCodeSvg();
+
+    // $twoFactorQrCodeUrl = $user->twoFactorQrCodeUrl();
 
 
-    dd($recoveryCodes , $twoFactorQrCodeSvg , $twoFactorQrCodeUrl);
+    // dd($recoveryCodes , $twoFactorQrCodeSvg , $twoFactorQrCodeUrl);
 
 
 

@@ -5,7 +5,6 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
-use Laravel\Passport\Exceptions\MissingScopeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
@@ -39,12 +38,12 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+
         });
 
         $this->renderable(function (Exception $e, Request $request) {
             if ($request->wantsJson()) {
-                return $this->handleException($request, $e);
+                //return $this->handleException($request, $e);
             }
         });
     }
@@ -56,7 +55,6 @@ class Handler extends ExceptionHandler
             return failed($e->getMessage(), [
                 'error_code' => $e->getCode(),
                 'scope_missing' => true,
-                '2fa_enabled' => !is_null(auth()->user()->two_factor_secret),
                 'message' => $e->getMessage()
             ],  $code);
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
