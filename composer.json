@@ -25,7 +25,8 @@
         "php-ffmpeg/php-ffmpeg": "^0.18.0",
         "pusher/pusher-php-server": "~3.0",
         "spatie/laravel-medialibrary": "^9.0.0",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
