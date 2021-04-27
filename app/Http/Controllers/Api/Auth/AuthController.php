@@ -34,8 +34,11 @@ class AuthController extends Controller
         $user = User::create($data);
         $resp = $this->proxy->grantPasswordToken($user->email, request('password'));
         return success([
-            'token' => $resp->access_token,
-            'expiresIn' => $resp->expires_in,
+            'token_type' => $resp->token_type,
+            'access_token' => $resp->access_token,
+            'refresh_token' => $resp->refresh_token,
+            'expires_in' => $resp->expires_in,
+            'user_id' => auth()->id()
         ]);
     }
 
