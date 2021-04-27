@@ -27,7 +27,6 @@ class LoginRequest extends FormRequest
         return [
             'login_key' => ['required', 'max:255'], // username or email
             'password' => ['required', 'max:50', Password::min(6)
-                ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
