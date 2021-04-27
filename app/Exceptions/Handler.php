@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -38,12 +40,11 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-
         });
 
         $this->renderable(function (Exception $e, Request $request) {
             if ($request->wantsJson()) {
-                //return $this->handleException($request, $e);
+                return $this->handleException($request, $e);
             }
         });
     }
@@ -56,6 +57,20 @@ class Handler extends ExceptionHandler
                 'error_code' => $e->getCode(),
                 'scope_missing' => true,
                 'message' => $e->getMessage()
+            ],  $code);
+        }
+        if ($e instanceof AuthenticationException) {
+            return failed($e->getMessage(), [
+                'error_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'type' => 'authentication_error'
+            ],  $code);
+        }
+        if ($e instanceof AuthorizationException) {
+            return failed($e->getMessage(), [
+                'error_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'type' => 'authorization_error'
             ],  $code);
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
             $code = $e->getStatusCode();
