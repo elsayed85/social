@@ -38,7 +38,6 @@ class AuthController extends Controller
             'access_token' => $resp->access_token,
             'refresh_token' => $resp->refresh_token,
             'expires_in' => $resp->expires_in,
-            'user_id' => auth()->id()
         ]);
     }
 
