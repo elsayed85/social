@@ -5,9 +5,14 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -51,28 +56,37 @@ class Handler extends ExceptionHandler
 
     public function handleException($request, Exception $e)
     {
-        $code = 500;
-        if ($e instanceof AccessDeniedHttpException) {
-            return failed($e->getMessage(), [
-                'error_code' => $e->getCode(),
-                'scope_missing' => true,
-                'message' => $e->getMessage()
-            ],  $code);
-        }
-        if ($e instanceof AuthenticationException) {
-            return failed($e->getMessage(), [
-                'error_code' => $e->getCode(),
-                'message' => $e->getMessage(),
-                'type' => 'authentication_error'
-            ],  $code);
-        }
         if ($e instanceof AuthorizationException) {
             return failed($e->getMessage(), [
-                'error_code' => $e->getCode(),
-                'message' => $e->getMessage(),
-                'type' => 'authorization_error'
-            ],  $code);
-        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+                'error_code' => Response::HTTP_UNAUTHORIZED,
+                'type' => 'authorization'
+            ],  Response::HTTP_UNAUTHORIZED);
+        } elseif ($e instanceof TokenMismatchException) {
+            return failed($e->getMessage(), [
+                'error_code' => Response::HTTP_FORBIDDEN,
+                'type' => 'access_denied_token_mismatch',
+            ],  Response::HTTP_FORBIDDEN);
+        } elseif ($e instanceof AccessDeniedHttpException) {
+            return failed($e->getMessage(), [
+                'error_code' => Response::HTTP_FORBIDDEN,
+                'type' => 'access_denied',
+            ],  Response::HTTP_FORBIDDEN);
+        } elseif ($e instanceof MethodNotAllowedHttpException) {
+            return failed($e->getMessage(), [
+                'error_code' => Response::HTTP_METHOD_NOT_ALLOWED,
+                'type' => 'method_not_allowed',
+            ],  Response::HTTP_METHOD_NOT_ALLOWED);
+        } elseif ($e instanceof AuthenticationException) {
+            return failed($e->getMessage(), [
+                'error_code' => Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED,
+                'type' => 'authentication'
+            ],  Response::HTTP_NETWORK_AUTHENTICATION_REQUIRE);
+        } elseif ($e instanceof ModelNotFoundException) {
+            return failed($e->getMessage(), [
+                'error_code' => Response::HTTP_NOT_FOUND,
+                'type' => 'model_not_found'
+            ],  Response::HTTP_NOT_FOUND);
+        } elseif ($e instanceof HttpExceptionInterface) {
             $code = $e->getStatusCode();
             return failed($e->getMessage(), [
                 'error_code' => $e->getCode(),
