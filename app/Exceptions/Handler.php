@@ -80,7 +80,7 @@ class Handler extends ExceptionHandler
             return failed($e->getMessage(), [
                 'error_code' => Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED,
                 'type' => 'authentication'
-            ],  Response::HTTP_NETWORK_AUTHENTICATION_REQUIRE);
+            ],  Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED);
         } elseif ($e instanceof ModelNotFoundException) {
             return failed($e->getMessage(), [
                 'error_code' => Response::HTTP_NOT_FOUND,

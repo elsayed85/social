@@ -23,7 +23,7 @@ trait Publishable
 
     public function scopeDraft($query)
     {
-        return $query->withoutTrashed()->whereNotNull('published_at');
+        return $query->withoutTrashed()->whereNull('published_at');
     }
 
     public function scopeTrashed($query)
