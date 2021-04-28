@@ -75,6 +75,7 @@ Route::get('follow', function () {
     // ]);
 });
 
+
 Route::get('test2', function () {
     auth()->loginUsingId(1);
 
@@ -112,7 +113,5 @@ Route::get('test2', function () {
 
 
 Route::get('test3', function () {
-    $posts = Post::search(request('query'))
-        ->get();
-    dd($posts);
+    dd(User::first()->isVerified());
 });
