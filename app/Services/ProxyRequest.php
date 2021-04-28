@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\Api\Postman\InvalidClientException;
+
 class ProxyRequest
 {
     public function grantPasswordToken(string $email, string $password, $scope = '')
@@ -39,6 +41,10 @@ class ProxyRequest
 
         $proxy = \Request::create('oauth/token', 'post', $params);
         $resp = json_decode(app()->handle($proxy)->getContent());
+
+        if (isset($resp->error)) {
+            throw new InvalidClientException($resp);
+        }
 
         $this->setHttpOnlyCookie($resp->refresh_token);
 

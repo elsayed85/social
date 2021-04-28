@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Api\Postman\InvalidClientException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -85,6 +86,13 @@ class Handler extends ExceptionHandler
             return failed($e->getMessage(), [
                 'error_code' => Response::HTTP_NOT_FOUND,
                 'type' => 'model_not_found'
+            ],  Response::HTTP_NOT_FOUND);
+        } elseif ($e instanceof InvalidClientException) {
+            return failed($e->getErrorMessage(), [
+                'error_code' => 4001,
+                'error_description' => $e->getErrorDescription(),
+                'type' => $e->getErrorType(),
+                'solution' => "php artisan passport:install"
             ],  Response::HTTP_NOT_FOUND);
         } elseif ($e instanceof HttpExceptionInterface) {
             $code = $e->getStatusCode();
