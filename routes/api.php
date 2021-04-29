@@ -38,6 +38,9 @@ Route::middleware(['auth:api'])->prefix('user')->as('user.')->group(function () 
 
     Route::middleware(['banned-user-api'])->group(function () {
         Route::post('update-avatar', [MeController::class, "updataAvatar"])->name('updata_avatar');
+        Route::post('update-cover', [MeController::class, "updataCover"])->name('updata_cover');
+        Route::post('update-info', [MeController::class, "updateInfo"])->name('update_info');
+        Route::post('chnage-password', [MeController::class, "changePassword"])->name('change_password');
 
         Route::middleware(['2fa_scope:2fa-pass'])->group(function () {
             Route::post('logout-other-browser-sessions', [MeController::class, "logoutOtherBrowserSessions"])

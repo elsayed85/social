@@ -49,7 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
+        'email_verified_at',
         'timezone',
         'banned_at',
         'private',
@@ -87,6 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
      */
     protected $appends = [
         'avatar',
+        'cover',
         'two_factor_auth_enabled'
     ];
 
@@ -154,6 +157,11 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
                     ->height(200)
                     ->nonQueued();
             });
+
+        $this
+            ->addMediaCollection('cover')
+            ->acceptsMimeTypes(static::getImageValidationRules())
+            ->singleFile();
     }
 
     public function getAvatarAttribute()
@@ -170,6 +178,15 @@ class User extends Authenticatable implements MustVerifyEmail, BannableContract,
         }
         $name = str_replace(' ', '+', $this->name);
         return collect(['original' => "https://ui-avatars.com/api/?name={$name}&color=7F9CF5&background=EBF4FF"]);
+    }
+
+    public function getCoverAttribute()
+    {
+        $avatar = $this->getFirstMedia('cover');
+        if (!is_null($avatar)) {
+            return $avatar->getFullUrl();
+        }
+        return "https://picsum.photos/1500/500";
     }
 
     public function getTwoFactorAuthEnabledAttribute()
