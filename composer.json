@@ -10,6 +10,7 @@
         "beyondcode/laravel-websockets": "^1.12",
         "cviebrock/eloquent-sluggable": "^8.0",
         "cybercog/laravel-ban": "^4.6",
+        "elsayed85/pretty_routes": "dev-master",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
