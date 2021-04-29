@@ -10,7 +10,6 @@
         "beyondcode/laravel-websockets": "^1.12",
         "cviebrock/eloquent-sluggable": "^8.0",
         "cybercog/laravel-ban": "^4.6",
-        "elsayed85/pretty_routes": "dev-master",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -27,7 +26,8 @@
         "pusher/pusher-php-server": "~3.0",
         "spatie/laravel-medialibrary": "^9.0.0",
         "tightenco/ziggy": "^1.0",
-        "webpatser/laravel-uuid": "^3.0"
+        "webpatser/laravel-uuid": "^3.0",
+        "wulfheart/pretty_routes": "^0.2.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
